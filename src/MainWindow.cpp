@@ -13,7 +13,6 @@
 #include <QColor>
 #include <QFontDatabase>
 
-// Worker 代码不变...
 void SnifferWorker::process() {
     std::cout << "[Worker] Starting. Device: " << device << " Filter: " << filter << std::endl;
     if (!m_sniffer.openDevice(device)) {
@@ -51,7 +50,6 @@ void MainWindow::setupUi() {
 
     tabWidget = new QTabWidget();
 
-    // Tab 1 (Sniffer) - 保持不变
     QWidget* tabSniffer = new QWidget();
     QVBoxLayout* layoutSniffer = new QVBoxLayout(tabSniffer);
     QHBoxLayout* controlLayout = new QHBoxLayout();
@@ -92,12 +90,11 @@ void MainWindow::setupUi() {
 
     layoutSniffer->addLayout(controlLayout); layoutSniffer->addWidget(mainSplitter);
 
-    // --- Tab 2: Injector (核心修改) ---
     QWidget* tabInjector = new QWidget();
     QFormLayout* formLayout = new QFormLayout(tabInjector);
     lineSrcIP = new QLineEdit("10.56.171.105");
     lineDstIP = new QLineEdit("10.56.0.1");
-    // 【修改】增加 Source MAC 输入框，填入你本机真实的 MAC
+    // 增加 Source MAC 输入框，填入你本机真实的 MAC
     lineSrcMac = new QLineEdit("A0:29:42:F5:1A:8B"); // <--- 必须是这个，冒号格式
     lineDstMac = new QLineEdit("14:14:4b:6b:29:b9");
     lineSrcPort = new QLineEdit("12345");
@@ -128,7 +125,7 @@ void MainWindow::setupUi() {
     connect(treeDetails, &QTreeWidget::itemClicked, this, &MainWindow::onTreeItemHovered);
 }
 
-// ... updateInterfaceList, onStartSniff 等不变 ...
+
 void MainWindow::updateInterfaceList() {
     auto devs = Sniffer::getAllDevices();
     comboInterfaces->clear();
@@ -193,7 +190,7 @@ void MainWindow::onPacketCaptured(QString srcIp, QString dstIp, QString proto, Q
     capturedSizes.push_back(len);
 }
 
-// --- 发包逻辑修正 ---
+// 发包逻辑
 void MainWindow::onSendPacket() {
     if (comboInterfaces->currentIndex() < 0) return;
     std::string devName = comboInterfaces->currentData().toString().toStdString();
@@ -203,7 +200,7 @@ void MainWindow::onSendPacket() {
     QString proto = comboProto->currentText();
     std::string sip = lineSrcIP->text().toStdString(); std::string dip = lineDstIP->text().toStdString();
     std::string dmac = lineDstMac->text().toStdString();
-    // 【修改】获取 Source MAC
+    // 获取 Source MAC
     std::string smac = lineSrcMac->text().toStdString();
 
     if (proto.startsWith("TCP")) success = injector.sendTCP(sip, dip, lineSrcPort->text().toInt(), lineDstPort->text().toInt(), smac, dmac);

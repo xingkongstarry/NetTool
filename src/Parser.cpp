@@ -9,7 +9,7 @@
 #include <arpa/inet.h>
 #endif
 
-// --- 辅助函数 ---
+
 std::string PacketParser::macToString(const uint8_t* mac) {
     std::stringstream ss;
     ss << std::hex << std::setfill('0');
@@ -27,7 +27,7 @@ void PacketParser::addTreeItem(QTreeWidgetItem* parent, QString text, int offset
     item->setData(1, Qt::UserRole, len);
 }
 
-// --- 简略解析 (列表显示) ---
+//简略解析 (列表显示)
 PacketParser::ParsedInfo PacketParser::parse(const struct pcap_pkthdr* pkthdr, const u_char* packet) {
     ParsedInfo info;
     info.length = pkthdr->len;
@@ -78,7 +78,7 @@ PacketParser::ParsedInfo PacketParser::parse(const struct pcap_pkthdr* pkthdr, c
         } else {
             info.protocol = "IP";
         }
-    } else if (type == 0x0806) { // 【修改】ARP 解析逻辑
+    } else if (type == 0x0806) { // ARP 解析逻辑
         info.protocol = "ARP";
         if (info.length >= sizeof(EthernetHeader) + sizeof(ARPHeader)) {
             const ARPHeader* arp = reinterpret_cast<const ARPHeader*>(packet + sizeof(EthernetHeader));
@@ -104,7 +104,7 @@ PacketParser::ParsedInfo PacketParser::parse(const struct pcap_pkthdr* pkthdr, c
     return info;
 }
 
-// --- 详细树构建 ---
+// 详细树构建
 void PacketParser::analyzeToTree(const std::vector<uint8_t>& data, QTreeWidget* tree) {
     tree->clear();
     const u_char* packet = data.data();
@@ -137,7 +137,7 @@ void PacketParser::analyzeToTree(const std::vector<uint8_t>& data, QTreeWidget* 
 
     addTreeItem(itemEth, QString("Type: %1 (0x%2)").arg(typeStr).arg(ethType, 4, 16, QChar('0')), 12, 2);
 
-    // --- 3. ARP 解析 (新增) ---
+    // --- 3. ARP 解析  ---
     if (ethType == 0x0806) {
         if (totalLen < 14 + sizeof(ARPHeader)) return;
         const ARPHeader* arp = reinterpret_cast<const ARPHeader*>(packet + 14);
@@ -173,7 +173,7 @@ void PacketParser::analyzeToTree(const std::vector<uint8_t>& data, QTreeWidget* 
 
     if (ethType != 0x0800 || totalLen < 34) return;
 
-    // --- 3. IPv4 解析 (保持不变) ---
+    // --- 3. IPv4 解析  ---
     const IPHeader* ip = reinterpret_cast<const IPHeader*>(packet + 14);
     int ipHeaderLen = ip->ihl * 4;
 

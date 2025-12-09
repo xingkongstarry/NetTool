@@ -41,7 +41,7 @@ void Injector::parseMac(const std::string& macStr, uint8_t* mac) {
     for(int i=0; i<6; i++) mac[i] = (uint8_t)bytes[i];
 }
 
-// 【修改】TCP 发送逻辑
+// TCP 发送
 bool Injector::sendTCP(const std::string& srcIP, const std::string& dstIP, int srcPort, int dstPort, const std::string& srcMacStr, const std::string& dstMacStr) {
     if (!m_handle) return false;
 
@@ -96,7 +96,7 @@ bool Injector::sendTCP(const std::string& srcIP, const std::string& dstIP, int s
     return true;
 }
 
-// 【修改】UDP 发送逻辑
+// UDP发送
 bool Injector::sendUDP(const std::string& srcIP, const std::string& dstIP, int srcPort, int dstPort, const std::string& msg, const std::string& srcMacStr, const std::string& dstMacStr) {
     if(!m_handle) return false;
 

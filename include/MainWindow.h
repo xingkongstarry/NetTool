@@ -68,7 +68,7 @@ private:
     // Injector
     QLineEdit* lineSrcIP;
     QLineEdit* lineDstIP;
-    QLineEdit* lineSrcMac; // 【新增】
+    QLineEdit* lineSrcMac;
     QLineEdit* lineDstMac;
     QLineEdit* lineSrcPort;
     QLineEdit* lineDstPort;

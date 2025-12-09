@@ -26,8 +26,8 @@ public:
 private:
     static std::string macToString(const uint8_t* mac);
 
-    // 【修改】统一为一个添加函数，不再区分 name/value 两列
+
     static void addTreeItem(QTreeWidgetItem* parent, QString text, int offset, int len);
 };
 
-#endif // PARSER_H
+#endif
