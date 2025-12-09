@@ -16,7 +16,7 @@ struct EthernetHeader {
     uint16_t etherType;
 };
 
-// 【新增】ARP Header (28 bytes)
+// ARP Header (28 bytes)
 struct ARPHeader {
     uint16_t hardwareType; // 硬件类型 (Ethernet=1)
     uint16_t protocolType; // 协议类型 (IPv4=0x0800)
